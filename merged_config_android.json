@@ -2,22 +2,6 @@
   "log": {
     "loglevel": "warning"
   },
-  "inbounds": [
-    {
-      "port": 10808,
-      "protocol": "socks",
-      "settings": {
-        "udp": true
-      },
-      "tag": "socks-in"
-    },
-    {
-      "port": 10809,
-      "protocol": "http",
-      "settings": {},
-      "tag": "http-in"
-    }
-  ],
   "outbounds": [
     {
       "protocol": "vless",
@@ -29,8 +13,7 @@
             "users": [
               {
                 "id": "55f7d143-a594-4a91-b030-f227039f85ef",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -56,8 +39,7 @@
             "users": [
               {
                 "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -83,8 +65,7 @@
             "users": [
               {
                 "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -110,8 +91,7 @@
             "users": [
               {
                 "id": "55f7d143-a594-4a91-b030-f227039f85ef",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -137,8 +117,7 @@
             "users": [
               {
                 "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -178,8 +157,7 @@
             "users": [
               {
                 "id": "ae065531-7a26-4c3f-82cf-7c2ee9effcde",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -236,8 +214,7 @@
             "users": [
               {
                 "id": "55f7d143-a594-4a91-b030-f227039f85ef",
-                "encryption": "none",
-                "flow": ""
+                "encryption": "none"
               }
             ]
           }
@@ -280,8 +257,32 @@
         ]
       },
       "tag": "ss_node_12"
+    },
+    {
+      "protocol": "freedom",
+      "tag": "direct"
     }
   ],
+  "observatory": {
+    "subjectSelector": [
+      "vless_node_1",
+      "vless_node_2",
+      "vless_node_3",
+      "vless_node_4",
+      "vless_node_5",
+      "ss_node_6",
+      "vless_node_7",
+      "ss_node_8",
+      "ss_node_9",
+      "vless_node_10",
+      "ss_node_11",
+      "ss_node_12",
+      "direct"
+    ],
+    "probeInterval": "30s",
+    "enableConcurrency": true,
+    "probeUrl": "http://cp.cloudflare.com/generate_204"
+  },
   "routing": {
     "balancers": [
       {
@@ -298,12 +299,14 @@
           "ss_node_9",
           "vless_node_10",
           "ss_node_11",
-          "ss_node_12"
+          "ss_node_12",
+          "direct"
         ],
         "strategy": {
           "type": "leastping",
           "interval": 30
-        }
+        },
+        "fallbackTag": "direct"
       }
     ],
     "rules": [
