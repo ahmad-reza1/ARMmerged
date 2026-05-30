@@ -1,0 +1,272 @@
+{
+    "log": {
+        "loglevel": "warning"
+    },
+    "inbounds": [{
+            "port": 10808,
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            },
+            "tag": "socks-in"
+        },
+        {
+            "port": 10809,
+            "protocol": "http",
+            "settings": {},
+            "tag": "http-in"
+        }
+    ],
+    "outbounds": [{
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "cdg-1.fromblancwithlove.com",
+                    "port": 8443,
+                    "users": [{
+                        "id": "55f7d143-a594-4a91-b030-f227039f85ef",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "cdg-1.fromblancwithlove.com",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_1"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "104.168.30.161",
+                    "port": 443,
+                    "users": [{
+                        "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "proxy.wastech.org",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_2"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "proxy.wastech.org",
+                    "port": 443,
+                    "users": [{
+                        "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "proxy.wastech.org",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_3"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "cdg-1.fromblancwithlove.com",
+                    "port": 8443,
+                    "users": [{
+                        "id": "55f7d143-a594-4a91-b030-f227039f85ef",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "cdg-1.fromblancwithlove.com",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_4"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "104.168.30.161",
+                    "port": 443,
+                    "users": [{
+                        "id": "7131f38f-9a4a-4e38-ae1d-aa9e132265ea",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "proxy.wastech.org",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_5"
+        },
+        {
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [{
+                    "address": "82.38.31.155",
+                    "port": 8080,
+                    "method": "chacha20-ietf-poly1305",
+                    "password": "oZIoA69Q8yhcQV8ka3Pa3A"
+                }]
+            },
+            "tag": "ss_node_6"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "45.130.125.76",
+                    "port": 2087,
+                    "users": [{
+                        "id": "ae065531-7a26-4c3f-82cf-7c2ee9effcde",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "chan1.newappdominfastlogin4.com",
+                    "fingerprint": "chrome"
+                },
+                "xhttpSettings": {
+                    "path": "/#\ud83d\ude80 45.130.125.76 | 227ms | 25.71Mbps"
+                }
+            },
+            "tag": "vless_node_7"
+        },
+        {
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [{
+                    "address": "82.38.31.218",
+                    "port": 8080,
+                    "method": "chacha20-ietf-poly1305",
+                    "password": "k1dBOmOB4oqi7Ump37a1bQ"
+                }]
+            },
+            "tag": "ss_node_8"
+        },
+        {
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [{
+                    "address": "82.38.31.210",
+                    "port": 8080,
+                    "method": "chacha20-ietf-poly1305",
+                    "password": "k1dBOmOB4oqi7Ump37a1bQ"
+                }]
+            },
+            "tag": "ss_node_9"
+        },
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [{
+                    "address": "cdg-1.fromblancwithlove.com",
+                    "port": 8443,
+                    "users": [{
+                        "id": "55f7d143-a594-4a91-b030-f227039f85ef",
+                        "encryption": "none",
+                        "flow": ""
+                    }]
+                }]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "serverName": "cdg-1.fromblancwithlove.com",
+                    "fingerprint": "chrome"
+                }
+            },
+            "tag": "vless_node_10"
+        },
+        {
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [{
+                    "address": "82.38.31.35",
+                    "port": 8080,
+                    "method": "chacha20-ietf-poly1305",
+                    "password": "oZIoA69Q8yhcQV8ka3Pa3A"
+                }]
+            },
+            "tag": "ss_node_11"
+        },
+        {
+            "protocol": "shadowsocks",
+            "settings": {
+                "servers": [{
+                    "address": "82.38.31.149",
+                    "port": 8080,
+                    "method": "chacha20-ietf-poly1305",
+                    "password": "oZIoA69Q8yhcQV8ka3Pa3A"
+                }]
+            },
+            "tag": "ss_node_12"
+        }
+    ],
+    "routing": {
+        "balancers": [{
+            "tag": "load_balancer",
+            "selector": [
+                "vless_node_1",
+                "vless_node_2",
+                "vless_node_3",
+                "vless_node_4",
+                "vless_node_5",
+                "ss_node_6",
+                "vless_node_7",
+                "ss_node_8",
+                "ss_node_9",
+                "vless_node_10",
+                "ss_node_11",
+                "ss_node_12"
+            ],
+            "strategy": {
+                "type": "roundrobin"
+            }
+        }],
+        "rules": [{
+            "type": "field",
+            "network": "tcp,udp",
+            "balancerTag": "load_balancer"
+        }]
+    }
+}
