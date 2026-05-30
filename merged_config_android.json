@@ -301,7 +301,8 @@
           "ss_node_12"
         ],
         "strategy": {
-          "type": "roundrobin"
+          "type": "leastping",
+          "interval": 30
         }
       }
     ],

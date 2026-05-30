@@ -4,7 +4,7 @@ import re
 from urllib.parse import urlparse, parse_qs
 
 INPUT_FILE = "links.txt"          # فایل ورودی شامل لینک‌های vless یا ss (هر خط یکی)
-OUTPUT_CONFIG = "merged_config2.json"
+OUTPUT_CONFIG = "merged_config_android.json"
 
 def parse_vless(link):
     if not link.startswith("vless://"):
@@ -176,7 +176,10 @@ def main():
                 {
                     "tag": "load_balancer",
                     "selector": tags,
-                    "strategy": {"type": "roundrobin"}
+                    "strategy": {
+                        "type": "leastping",
+                        "interval": 30
+                    }
                 }
             ],
             "rules": [
