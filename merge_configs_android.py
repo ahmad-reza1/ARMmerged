@@ -1,30 +1,28 @@
 import json
 import base64
 import re
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs
 
-INPUT_FILE = "links.txt"          # فایل ورودی شامل لینک‌های vless یا ss (هر خط یکی)
+INPUT_FILE = "links.txt"                # لینک‌های vless:// یا ss://
 OUTPUT_CONFIG = "merged_config_android.json"
+STRATEGY = "roundrobin"                  # تغییر به roundrobin در صورت نیاز
 
 def parse_vless(link):
     if not link.startswith("vless://"):
         return None
-    # حذف vless://
     without_proto = link[8:]
-    # جدا کردن بخش uuid و بقیه
     at_index = without_proto.find('@')
     if at_index == -1:
         return None
     uuid = without_proto[:at_index]
     rest = without_proto[at_index+1:]
-    # جدا کردن host:port و query
     m = re.match(r'([^:]+):(\d+)(\?.*)?', rest)
     if not m:
         return None
     address = m.group(1)
     port = int(m.group(2))
     query_part = m.group(3) or ''
-    params = parse_qs(query_part[1:])  # حذف '?'
+    params = parse_qs(query_part[1:])
 
     encryption = params.get('encryption', ['none'])[0]
     security = params.get('security', [''])[0]
@@ -35,17 +33,17 @@ def parse_vless(link):
     path = params.get('path', ['/'])[0]
     host = params.get('host', [''])[0]
 
+    user = {"id": uuid, "encryption": encryption}
+    if flow:
+        user["flow"] = flow
+
     outbound = {
         "protocol": "vless",
         "settings": {
             "vnext": [{
                 "address": address,
                 "port": port,
-                "users": [{
-                    "id": uuid,
-                    "encryption": encryption,
-                    "flow": flow if flow else ""
-                }]
+                "users": [user]
             }]
         },
         "streamSettings": {
@@ -58,10 +56,7 @@ def parse_vless(link):
             "serverName": sni,
             "fingerprint": fingerprint
         }
-    if network == "tcp":
-        # headerType در لینک‌های شما none است، پس نیازی به http header نیست
-        pass
-    elif network == "ws":
+    if network == "ws":
         outbound["streamSettings"]["wsSettings"] = {
             "path": path,
             "headers": {"Host": host if host else address}
@@ -73,43 +68,32 @@ def parse_vless(link):
     return outbound
 
 def parse_ss(link):
-    # فرمت ss://base64@host:port?params#tag
     if not link.startswith("ss://"):
         return None
     content = link[5:]
-    # جدا کردن بخش قبل از @ (که رمزگذاری شده)
     at_index = content.find('@')
     if at_index == -1:
         return None
     encoded = content[:at_index]
     rest = content[at_index+1:]
-    # ممکن است encoded به صورت base64 باشد، اما گاهی به صورت plaintext
     try:
-        # اضافه کردن padding
         missing = len(encoded) % 4
         if missing:
             encoded += '=' * (4 - missing)
         decoded = base64.b64decode(encoded).decode('utf-8')
-        # decoded به صورت method:password
         method_pass = decoded.split(':', 1)
         if len(method_pass) != 2:
             return None
         method = method_pass[0]
         password = method_pass[1]
     except:
-        # اگر base64 نبود، شاید به صورت plaintext method:password@... باشد
-        # ولی در لینک‌های شما به نظر base64 می‌آید.
         return None
 
-    # حالا rest شامل host:port?query#tag
     m = re.match(r'([^:]+):(\d+)(\?.*)?', rest)
     if not m:
         return None
     address = m.group(1)
     port = int(m.group(2))
-    query_part = m.group(3) or ''
-    params = parse_qs(query_part[1:])
-    # می‌توان پارامترهایی مثل plugin را بررسی کرد، اما فعلاً نادیده می‌گیریم.
 
     outbound = {
         "protocol": "shadowsocks",
@@ -153,48 +137,57 @@ def main():
         print("هیچ outbound سالمی پیدا نشد.")
         return
 
-    # ساخت کانفیگ نهایی با بالانسر round-robin
+    # اضافه کردن fallback مستقیم (freedom)
+    fallback_tag = "direct"
+    outbounds.append({
+        "protocol": "freedom",
+        "tag": fallback_tag
+    })
+    tags.append(fallback_tag)
+
+    # observatory برای leastping (ضروری)
+    observatory = {
+        "subjectSelector": tags,
+        "probeInterval": "30s",
+        "enableConcurrency": True,
+        "probeUrl": "http://cp.cloudflare.com/generate_204"
+    }
+
+    # بالانسر با استراتژی leastping
+    balancer = {
+        "tag": "load_balancer",
+        "selector": tags,
+        "strategy": {
+            "type": "leastping",
+            "interval": 30
+        },
+        "fallbackTag": fallback_tag
+    }
+
+    routing = {
+        "balancers": [balancer],
+        "rules": [
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "balancerTag": "load_balancer"
+            }
+        ]
+    }
+
     config = {
         "log": {"loglevel": "warning"},
-        "inbounds": [
-            {
-                "port": 10808,
-                "protocol": "socks",
-                "settings": {"udp": True},
-                "tag": "socks-in"
-            },
-            {
-                "port": 10809,
-                "protocol": "http",
-                "settings": {},
-                "tag": "http-in"
-            }
-        ],
         "outbounds": outbounds,
-        "routing": {
-            "balancers": [
-                {
-                    "tag": "load_balancer",
-                    "selector": tags,
-                    "strategy": {"type": "roundrobin"}
-                }
-            ],
-            "rules": [
-                {
-                    "type": "field",
-                    "network": "tcp,udp",
-                    "balancerTag": "load_balancer"
-                }
-            ]
-        }
+        "observatory": observatory,
+        "routing": routing
     }
 
     with open(OUTPUT_CONFIG, 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=2)
-    print(f"\n✅ فایل {OUTPUT_CONFIG} با {len(outbounds)} خروجی ساخته شد.")
-    print("برای اجرا:")
-    print(f"  xray -config {OUTPUT_CONFIG}")
-    print("سپس مرورگر یا اپ خود را روی پروکسی SOCKS5 127.0.0.1:10808 تنظیم کنید.")
+
+    print(f"\n✅ فایل {OUTPUT_CONFIG} با {len(outbounds)} outbound ساخته شد.")
+    print(f"استراتژی: {STRATEGY}")
+    print("📱 این فایل را به گوشی منتقل کرده و در v2rayNG با 'Import Config from File' وارد کنید.")
 
 if __name__ == "__main__":
     main()
