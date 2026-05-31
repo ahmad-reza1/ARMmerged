@@ -3,9 +3,9 @@ import base64
 import re
 from urllib.parse import parse_qs
 
-INPUT_FILE = "links.txt"                # لینک‌های vless:// یا ss://
+INPUT_FILE = "links.txt"              
 OUTPUT_CONFIG = "merged_config_android.json"
-STRATEGY = "roundrobin"                  # تغییر به roundrobin در صورت نیاز
+STRATEGY = "roundrobin"                 
 
 def parse_vless(link):
     if not link.startswith("vless://"):
@@ -137,7 +137,6 @@ def main():
         print("هیچ outbound سالمی پیدا نشد.")
         return
 
-    # اضافه کردن fallback مستقیم (freedom)
     fallback_tag = "direct"
     outbounds.append({
         "protocol": "freedom",
@@ -145,7 +144,6 @@ def main():
     })
     tags.append(fallback_tag)
 
-    # observatory برای leastping (ضروری)
     observatory = {
         "subjectSelector": tags,
         "probeInterval": "30s",
@@ -153,7 +151,6 @@ def main():
         "probeUrl": "http://cp.cloudflare.com/generate_204"
     }
 
-    # بالانسر با استراتژی leastping
     balancer = {
         "tag": "load_balancer",
         "selector": tags,

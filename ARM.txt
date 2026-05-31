@@ -1,6 +1,6 @@
-vless://55f7d143-a594-4a91-b030-f227039f85ef@cdg-1.fromblancwithlove.com:8443?encryption=none&security=tls&sni=cdg-1.fromblancwithlove.com&fp=chrome&insecure=0&allowInsecure=0&type=tcp&headerType=none#%F0%9F%9A%80%20cdg-1.fromblancwithlove.com%20%7C%20214ms%20%7C%2018.05Mbps
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpvWklvQTY5UTh5aGNRVjhrYTNQYTNB@82.38.31.155:8080?#%F0%9F%9A%80%2082.38.31.155%20%7C%20172ms%20%7C%2017.78Mbps
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.214:8080?#%F0%9F%9A%80%2082.38.31.214%20%7C%20163ms%20%7C%2018.56Mbps
+vless://55f7d143-a594-4a91-b030-f227039f85ef@cdg-1.fromblancwithlove.com:8443?encryption=none&security=tls&sni=cdg-1.fromblancwithlove.com&fp=chrome&insecure=0&allowInsecure=0&type=tcp&headerType=none#Listen%20to%20music%20with%20us%20on%20Telegram%3A%20%40usedentmusic%20%7C%20214ms%20%7C%2018.05Mbps
+ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpvWklvQTY5UTh5aGNRVjhrYTNQYTNB@82.38.31.155:8080?#Listen%20to%20music%20with%20us%20on%20Telegram%3A%20%40usedentmusic%20%7C%20172ms%20%7C%2017.78Mbps
+ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.214:8080?#Listen%20to%20music%20with%20us%20on%20Telegram%3A%20%40usedentmusic%20%7C%20163ms%20%7C%2018.56Mbps
 vless://8e6d6d70-5f7e-4f2c-89b6-8f5f8db4c3a1@104.16.7.70:443?encryption=none&security=tls&sni=chatgpt.g9q.fun&fp=chrome&insecure=0&allowInsecure=0&type=xhttp&path=%2F#%F0%9F%9A%80%20104.16.7.70%20%7C%20238ms%20%7C%2025.0Mbps
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpvWklvQTY5UTh5aGNRVjhrYTNQYTNB@82.38.31.35:8080?#%F0%9F%9A%80%2082.38.31.35%20%7C%20167ms%20%7C%2018.43Mbps
 ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.210:8080?#%F0%9F%9A%80%2082.38.31.210%20%7C%20167ms%20%7C%2017.88Mbps

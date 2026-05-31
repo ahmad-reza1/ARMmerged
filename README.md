@@ -1,2 +1,2 @@
 # ARMmerged
-handling the the the thing
+Testing and setting some configs from all over the internet

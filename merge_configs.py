@@ -3,28 +3,25 @@ import base64
 import re
 from urllib.parse import urlparse, parse_qs
 
-INPUT_FILE = "links.txt"          # فایل ورودی شامل لینک‌های vless یا ss (هر خط یکی)
+INPUT_FILE = "links.txt"         
 OUTPUT_CONFIG = "merged_config.json"
 
 def parse_vless(link):
     if not link.startswith("vless://"):
         return None
-    # حذف vless://
     without_proto = link[8:]
-    # جدا کردن بخش uuid و بقیه
     at_index = without_proto.find('@')
     if at_index == -1:
         return None
     uuid = without_proto[:at_index]
     rest = without_proto[at_index+1:]
-    # جدا کردن host:port و query
     m = re.match(r'([^:]+):(\d+)(\?.*)?', rest)
     if not m:
         return None
     address = m.group(1)
     port = int(m.group(2))
     query_part = m.group(3) or ''
-    params = parse_qs(query_part[1:])  # حذف '?'
+    params = parse_qs(query_part[1:]) 
 
     encryption = params.get('encryption', ['none'])[0]
     security = params.get('security', [''])[0]
@@ -59,7 +56,6 @@ def parse_vless(link):
             "fingerprint": fingerprint
         }
     if network == "tcp":
-        # headerType در لینک‌های شما none است، پس نیازی به http header نیست
         pass
     elif network == "ws":
         outbound["streamSettings"]["wsSettings"] = {
@@ -73,19 +69,15 @@ def parse_vless(link):
     return outbound
 
 def parse_ss(link):
-    # فرمت ss://base64@host:port?params#tag
     if not link.startswith("ss://"):
         return None
     content = link[5:]
-    # جدا کردن بخش قبل از @ (که رمزگذاری شده)
     at_index = content.find('@')
     if at_index == -1:
         return None
     encoded = content[:at_index]
     rest = content[at_index+1:]
-    # ممکن است encoded به صورت base64 باشد، اما گاهی به صورت plaintext
     try:
-        # اضافه کردن padding
         missing = len(encoded) % 4
         if missing:
             encoded += '=' * (4 - missing)
@@ -97,11 +89,10 @@ def parse_ss(link):
         method = method_pass[0]
         password = method_pass[1]
     except:
-        # اگر base64 نبود، شاید به صورت plaintext method:password@... باشد
-        # ولی در لینک‌های شما به نظر base64 می‌آید.
+
         return None
 
-    # حالا rest شامل host:port?query#tag
+
     m = re.match(r'([^:]+):(\d+)(\?.*)?', rest)
     if not m:
         return None
@@ -109,7 +100,7 @@ def parse_ss(link):
     port = int(m.group(2))
     query_part = m.group(3) or ''
     params = parse_qs(query_part[1:])
-    # می‌توان پارامترهایی مثل plugin را بررسی کرد، اما فعلاً نادیده می‌گیریم.
+
 
     outbound = {
         "protocol": "shadowsocks",
@@ -153,7 +144,6 @@ def main():
         print("هیچ outbound سالمی پیدا نشد.")
         return
 
-    # ساخت کانفیگ نهایی با بالانسر round-robin
     config = {
         "log": {"loglevel": "warning"},
         "inbounds": [
